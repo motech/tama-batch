@@ -22,20 +22,24 @@ public class CouchDbMetaData {
     }
 
     static String getUrlForView(String databaseName, String designDocName) {
-        return String.format("%s%s/%s/_view/all", couchDbBaseUrl(), databaseName, designDocName);
+        return String.format("%s%s/_design/%s/_view/all", couchDbBaseUrl(), databaseName, designDocName);
     }
 
     public static String getUrlForCompaction(String databaseName) {
         return String.format("%s%s/_compact", couchDbBaseUrl(), databaseName);
     }
 
-    public List<String> getDesignDocNames(String dbName) throws IOException, JSONException {
+    public static String getUrlForCompaction(String databaseName, String designName) {
+        return String.format("%s%s/_compact/%s", couchDbBaseUrl(), databaseName, designName);
+    }
+
+    public static List<String> getDesignDocNames(String dbName) throws IOException, JSONException {
         String url = couchDbBaseUrl() + dbName + "/_all_docs?startkey=%22_design%2F%22&endkey=%22_design0%22&include_docs=true";
         final JSONObject jsonObject = new JSONObject(httpGetAsString(url));
         final JSONArray rows = jsonObject.getJSONArray("rows");
         List<String> result = new LinkedList<String>();
         for (int i = 0; i < rows.length(); i++) {
-            result.add(rows.getJSONObject(i).getString("id"));
+            result.add(rows.getJSONObject(i).getString("id").substring(8));
         }
         return result;
     }

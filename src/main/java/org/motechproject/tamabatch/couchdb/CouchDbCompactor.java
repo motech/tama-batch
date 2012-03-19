@@ -19,13 +19,19 @@ public class CouchDbCompactor {
         log.entering(CouchDBViewIndexer.class.getName(), "compactAllDBs");
         for (String applicationDatabase : CouchDbMetaData.getApplicationDatabases()) {
             try {
-                final String urlForCompaction = CouchDbMetaData.getUrlForCompaction(applicationDatabase);
-                compact(urlForCompaction);
+                compactDatabase(applicationDatabase);
             } catch (Exception e) {
                 log.severe(e.getMessage());
             }
         }
         log.exiting(this.getClass().getName(), "compactAllDBs");
+    }
+
+    private void compactDatabase(String applicationDatabase) throws IOException, JSONException {
+        compact(CouchDbMetaData.getUrlForCompaction(applicationDatabase));
+        for (String designDocName : CouchDbMetaData.getDesignDocNames(applicationDatabase)) {
+            compact(CouchDbMetaData.getUrlForCompaction(applicationDatabase, designDocName));
+        }
     }
 
     private boolean compact(String urlForCompaction) throws IOException, JSONException {

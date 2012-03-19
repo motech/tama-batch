@@ -5,14 +5,13 @@ import org.motechproject.tamabatch.couchdb.CouchDbMetaData;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class CouchDbMetaDataTest {
 
     @Test
     public void shouldGetDesignDocs() throws Exception {
-        final List<String> designDocNames = new CouchDbMetaData().getDesignDocNames("tama-web");
+        final List<String> designDocNames = CouchDbMetaData.getDesignDocNames("tama-web");
         assertTrue(designDocNames.size() > 0);
     }
 

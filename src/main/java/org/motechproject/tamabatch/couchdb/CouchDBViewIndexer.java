@@ -26,7 +26,7 @@ public class CouchDBViewIndexer {
     }
 
     private void indexAllViewsInDatabase(String databaseName) throws IOException, JSONException {
-        final List<String> designDocNames = new CouchDbMetaData().getDesignDocNames(databaseName);
+        final List<String> designDocNames = CouchDbMetaData.getDesignDocNames(databaseName);
         for (String designDocName : designDocNames) {
             indexView(databaseName, designDocName);
         }
